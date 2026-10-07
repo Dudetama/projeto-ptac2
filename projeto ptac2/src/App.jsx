@@ -2,31 +2,50 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [novaIdeia, setNovaIdeia] = useState('')
-  const [ideias, setIdeias] = useState([])
+  const [novaTarefa, setNovaTarefa] = useState('')
+  const [Tarefas, setTarefas] = useState([])
+  const [erro, setErro] = useState('')
+
+  function adicionarTarefa(e) {
+  e.preventDefault()
+
+    if (novaTarefa === '') {
+        setErro('Digite alguma coisa!')
+      return
+    }
+
+  setTarefas([...Tarefas, novaTarefa])
+  setNovaTarefa('')
+  setErro('')
+}
 
   return (
     <div>
-      <h1>Painel de Ideias</h1>
+      <h1>Lista de Tarefas</h1>
 
-      <form>
+      <form onSubmit={adicionarTarefa}>
+        {erro && <p>{erro}</p>}
         <input
           type="text"
-          placeholder="Digite uma ideia"
-          value={novaIdeia}
-          onChange={(e) => setNovaIdeia(e.target.value)}
+          placeholder="Digite uma nova tarefa"
+          value={novaTarefa}
+          onChange={(e) => setNovaTarefa(e.target.value)}
         />
 
         <button>Adicionar</button>
       </form>
 
-      <h2>Ideias</h2>
+      
 
       <div>
-         As ideias vão aparecer aqui
+         {Tarefas.map((tarefa) => (
+           <p>{tarefa}</p>
+          ))}
       </div>
 
       <p>0 ideias no painel - 0 concluídas</p>
     </div>
   )
 }
+
+export default App

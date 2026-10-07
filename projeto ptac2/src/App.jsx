@@ -3,31 +3,80 @@ import './App.css'
 
 function App() {
   const [novaTarefa, setNovaTarefa] = useState('')
-  const [Tarefas, setTarefas] = useState([])
+  const [tarefas, setTarefas] = useState([])
   const [erro, setErro] = useState('')
 
   function adicionarTarefa(e) {
-  e.preventDefault()
+    e.preventDefault()
 
-    if (novaTarefa === '') {
-        setErro('Digite alguma coisa!')
+    if (novaTarefa.trim() === '') {
+      setErro('Digite uma tarefa!')
       return
     }
 
-  setTarefas([...Tarefas, novaTarefa])
-  setNovaTarefa('')
-  setErro('')
-}
+    const nova = {
+      id: Date.now(),
+      texto: novaTarefa,
+      concluida: false
+    }
+
+    setTarefas([...tarefas, nova])
+    setNovaTarefa('')
+    setErro('')
+  }
+
+  function concluirTarefa(id) {
+    const novasTarefas = tarefas.map((tarefa) => {
+      if (tarefa.id === id) {
+        return {
+          ...tarefa,
+          concluida: !tarefa.concluida
+        }
+      }
+
+      return tarefa
+    })
+
+    setTarefas(novasTarefas)
+  }
+
+  function excluirTarefa(id) {
+    const novasTarefas = tarefas.filter((tarefa) => tarefa.id !== id)
+
+    setTarefas(novasTarefas)
+  }
+
+  function editarTarefa(id) {
+    const tarefaNova = prompt('Digite a nova tarefa:')
+
+    if (tarefaNova === null || tarefaNova.trim() === '') {
+      return
+    }
+
+    const novasTarefas = tarefas.map((tarefa) => {
+      if (tarefa.id === id) {
+        return {
+          ...tarefa,
+          texto: tarefaNova
+        }
+      }
+
+      return tarefa
+    })
+
+    setTarefas(novasTarefas)
+  }
+
+  const concluidas = tarefas.filter((tarefa) => tarefa.concluida).length
 
   return (
     <div>
-      <h1>Lista de Tarefas</h1>
+      <h1>Painel de Tarefas</h1>
 
       <form onSubmit={adicionarTarefa}>
-        {erro && <p>{erro}</p>}
         <input
           type="text"
-          placeholder="Digite uma nova tarefa"
+          placeholder="Digite uma tarefa"
           value={novaTarefa}
           onChange={(e) => setNovaTarefa(e.target.value)}
         />
@@ -35,15 +84,37 @@ function App() {
         <button>Adicionar</button>
       </form>
 
-      
+      {erro && <p>{erro}</p>}
+
+      <h2>Tarefas</h2>
 
       <div>
-         {Tarefas.map((tarefa) => (
-           <p>{tarefa}</p>
-          ))}
+        {tarefas.map((tarefa) => (
+          <div key={tarefa.id}>
+            <input
+              type="checkbox"
+              checked={tarefa.concluida}
+              onChange={() => concluirTarefa(tarefa.id)}
+            />
+
+            <span>
+              {tarefa.texto}
+            </span>
+
+            <button onClick={() => editarTarefa(tarefa.id)}>
+              Editar
+            </button>
+
+            <button onClick={() => excluirTarefa(tarefa.id)}>
+              Excluir
+            </button>
+          </div>
+        ))}
       </div>
 
-      <p>0 ideias no painel - 0 concluídas</p>
+      <p>
+        {tarefas.length} tarefas no painel - {concluidas} concluídas
+      </p>
     </div>
   )
 }

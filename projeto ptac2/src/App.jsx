@@ -41,7 +41,9 @@ function App() {
   }
 
   function excluirTarefa(id) {
-    const novasTarefas = tarefas.filter((tarefa) => tarefa.id !== id)
+    const novasTarefas = tarefas.filter(
+      (tarefa) => tarefa.id !== id
+    )
 
     setTarefas(novasTarefas)
   }
@@ -67,7 +69,9 @@ function App() {
     setTarefas(novasTarefas)
   }
 
-  const concluidas = tarefas.filter((tarefa) => tarefa.concluida).length
+  const concluidas = tarefas.filter(
+    (tarefa) => tarefa.concluida
+  ).length
 
   return (
     <div>
@@ -81,7 +85,9 @@ function App() {
           onChange={(e) => setNovaTarefa(e.target.value)}
         />
 
-        <button>Adicionar</button>
+        <button type="submit">
+          Adicionar
+        </button>
       </form>
 
       {erro && <p>{erro}</p>}
@@ -101,11 +107,15 @@ function App() {
               {tarefa.texto}
             </span>
 
-            <button onClick={() => editarTarefa(tarefa.id)}>
+            <button
+              onClick={() => editarTarefa(tarefa.id)}
+            >
               Editar
             </button>
 
-            <button onClick={() => excluirTarefa(tarefa.id)}>
+            <button
+              onClick={() => excluirTarefa(tarefa.id)}
+            >
               Excluir
             </button>
           </div>
